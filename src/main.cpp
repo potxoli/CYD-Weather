@@ -18,7 +18,9 @@ ESP32Time rtc(0);
 
 //#################### CONFIG STUFF  ###################
 //time zone  
-int zone = -TIME_ZONE;
+//int zone = TIME_ZONE;
+String timezoneString = TIMEZONE_STRING;
+
 String town = TOWN;
 String latitude = LATITUDE;
 String longitude = LONGITUDE;
@@ -64,7 +66,8 @@ char sunriseString[6];
 String Wmsg = "";
 
 void setTime() {
-  configTime(3600 * zone, 0, ntpServer);
+  // Use POSIX timezone string for automatic DST handling
+  configTzTime(timezoneString.c_str(), ntpServer);
   struct tm timeinfo;
   if (getLocalTime(&timeinfo)) {
     rtc.setTimeStruct(timeinfo);
